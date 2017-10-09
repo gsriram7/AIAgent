@@ -5,11 +5,12 @@ import java.util.Random;
 public class Game {
 
     char[][] board;
-    int size;
+    int dimension;
+    int score = 0;
 
-    public Game(int size) {
-        this.size = size;
-        board = new char[size][size];
+    public Game(int dimension) {
+        this.dimension = dimension;
+        board = new char[dimension][dimension];
     }
 
     public Game(char[][] copy) {
@@ -19,12 +20,12 @@ public class Game {
     }
 
     boolean isSafe(char[][] b, char target, int row, int col) {
-        return (row >= 0) && (row < size) &&
-                (col >= 0) && (col < size) &&
+        return (row >= 0) && (row < dimension) &&
+                (col >= 0) && (col < dimension) &&
                 (b[row][col] == target && b[row][col] != '*');
     }
 
-    void dfs(char[][] b, char target, int row, int col, HashSet<Cell> visited)  {
+    void dfs(char[][] b, char target, int row, int col, HashSet<Cell> visited) {
         int[] r = {0, 0, 1, -1};
         int[] c = {1, -1, 0, 0};
 
@@ -41,21 +42,26 @@ public class Game {
         }
     }
 
+    void updateScore(int number) {
+        score = score + number * number;
+    }
+
 
     HashSet<Cell> dfs(int row, int col) {
-        HashSet<Cell> visited = new HashSet<>(size*size);
+        HashSet<Cell> visited = new HashSet<>(dimension * dimension);
 
         dfs(board, board[row][col], row, col, visited);
 
         for (Cell cell : visited) board[cell.row][cell.col] = '*';
 
+        updateScore(visited.size());
         return visited;
     }
 
     char[][] getCopy() {
-        char[][] copy = new char[size][size];
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
+        char[][] copy = new char[dimension][dimension];
+        for (int i = 0; i < dimension; i++)
+            for (int j = 0; j < dimension; j++)
                 copy[i][j] = board[i][i];
         return copy;
     }

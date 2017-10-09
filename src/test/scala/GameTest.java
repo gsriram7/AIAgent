@@ -66,4 +66,21 @@ public class GameTest {
 
         for (Cell cell : visited) assertThat(game.board[cell.row][cell.col], is('*'));
     }
+
+    @Test
+    public void shouldUpdateScoreAsSquareOfANumber() throws Exception {
+        assertThat(game.score, is(0));
+
+        game.updateScore(5);
+
+        assertThat(game.score, is(25));
+    }
+
+    @Test
+    public void shouldUpdateScoreAfterDfs() throws Exception {
+        game.dfs(2, 2);
+
+        assertThat(game.score, is(9 * 9));
+    }
+
 }
