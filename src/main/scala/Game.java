@@ -19,6 +19,11 @@ public class Game {
             System.arraycopy(copy[i], 0, board[i], 0, copy.length);
     }
 
+    public Game(Game copy) {
+        this(copy.board);
+        this.score = copy.score;
+    }
+
     boolean isSafe(char[][] b, char target, int row, int col) {
         return (row >= 0) && (row < dimension) &&
                 (col >= 0) && (col < dimension) &&
@@ -46,6 +51,40 @@ public class Game {
         score = score + number * number;
     }
 
+    void descendVisited() {
+        for (int col = 0; col < dimension; col++) {
+            char[] currentCol = new char[dimension];
+            int countOfStars = 0;
+            for (int row = 0; row < dimension; row++) {
+                if (board[row][col] == '*') countOfStars++;
+
+                currentCol[row] = board[row][col];
+            }
+
+            if (countOfStars != 0) {
+                char[] newCol = descend(currentCol, countOfStars);
+
+                for (int row = 0; row < dimension; row++) board[row][col] = newCol[row];
+            }
+        }
+    }
+
+    char[] descend(char[] currentCol, int countOfStars) {
+
+        int starIndex = 0;
+        int fruitIndex = countOfStars;
+        char[] descendedFruits = new char[currentCol.length];
+
+        for (char c : currentCol) {
+            if (c == '*')
+                descendedFruits[starIndex++] = c;
+            else
+                descendedFruits[fruitIndex++] = c;
+        }
+
+        return descendedFruits;
+
+    }
 
     HashSet<Cell> dfs(int row, int col) {
         HashSet<Cell> visited = new HashSet<>(dimension * dimension);

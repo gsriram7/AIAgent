@@ -1,6 +1,7 @@
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -83,4 +84,52 @@ public class GameTest {
         assertThat(game.score, is(9 * 9));
     }
 
+    @Test
+    public void shouldMoveStarsToOneEndOfArray() throws Exception {
+        char[] chars = new char[game.dimension];
+        for (int i = 0; i < game.dimension; i++) chars[i] = '2';
+
+        assertThat(game.descend(chars, 0), is(chars));
+
+        chars[2] = '*';
+        chars[4] = '*';
+
+        assertThat(game.descend(chars, 2), is(new char[]{'*', '*', '2', '2', '2'}));
+    }
+
+    @Test
+    public void shouldDescendFruitsThatAreExplored() throws Exception {
+        char[][] ones = initWithOnes(5);
+        Game test = new Game(ones);
+
+        for (int i = 0; i < test.dimension; i++) {
+            test.board[2][i] = '*';
+            test.board[4][i] = '*';
+        }
+
+        test.board[3][0] = '*';
+        test.board[3][1] = '*';
+
+        test.descendVisited();
+
+        for (int i = 0; i < ones.length; i++) {
+            ones[0][i] = '*';
+            ones[1][i] = '*';
+        }
+
+        ones[2][0] = '*';
+        ones[2][1] = '*';
+
+        System.out.println(Arrays.deepToString(ones));
+        System.out.println(Arrays.deepToString(test.board));
+
+        assertThat(test.board, is(ones));
+    }
+
+    private char[][] initWithOnes(int size) {
+        char[][] chars = new char[size][size];
+        for (int i = 0; i < size; i++) for (int j = 0; j < size; j++) chars[i][j] = '1';
+
+        return chars;
+    }
 }
