@@ -30,11 +30,10 @@ public class Game {
                 (b[row][col] == target && b[row][col] != '*');
     }
 
-    void dfs(char[][] b, char target, int row, int col, HashSet<Cell> visited) {
+    private void dfs(char[][] b, char target, int row, int col, HashSet<Cell> visited) {
         int[] r = {0, 0, 1, -1};
         int[] c = {1, -1, 0, 0};
 
-        //What if the curr cell is not target?
         visited.add(new Cell(row, col));
 
         for (int i = 0; i < r.length; i++) {
