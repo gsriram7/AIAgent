@@ -15,19 +15,12 @@ public class GameTest {
     @Before
     public void setUp() throws Exception {
         game = new Game(5);
-        char[] ip = {'0', '1', '2', '4'};
-        Random random = new Random(0);
-        for (int i = 0; i < 5; i++) for (int j = 0; j < 5; j++) game.board[i][j] = ip[random.nextInt(4)];
-
-        for (int i = 0; i < 5; i++) {
-            game.board[2][i] = '5';
-            game.board[i][2] = '5';
-        }
+        TestUtils.initWithRandomNumbers(game);
     }
 
     @Test
     public void shouldSayIfACellIsSafe() throws Exception {
-        boolean isSafe = game.isSafe(game.board, '5', 2, 2);
+        boolean isSafe = game.isSafe(game.board, '0', 2, 2);
 
         assertThat(isSafe, is(true));
     }
@@ -108,7 +101,7 @@ public class GameTest {
 
     @Test
     public void shouldDescendFruitsThatAreExplored() throws Exception {
-        char[][] ones = initWithOnes(5);
+        char[][] ones = TestUtils.initWithOnes(5);
         Game test = new Game(ones);
 
         for (int i = 0; i < test.dimension; i++) {
@@ -118,6 +111,8 @@ public class GameTest {
 
         test.board[3][0] = '*';
         test.board[3][1] = '*';
+
+        System.out.println(Arrays.deepToString(test.board));
 
         test.descendVisited();
 
@@ -129,7 +124,7 @@ public class GameTest {
         ones[2][0] = '*';
         ones[2][1] = '*';
 
-        System.out.println(Arrays.deepToString(ones));
+//        System.out.println(Arrays.deepToString(ones));
         System.out.println(Arrays.deepToString(test.board));
 
         assertThat(test.board, is(ones));
@@ -146,10 +141,4 @@ public class GameTest {
         System.out.println(Arrays.deepToString(game.board));
     }
 
-    private char[][] initWithOnes(int size) {
-        char[][] chars = new char[size][size];
-        for (int i = 0; i < size; i++) for (int j = 0; j < size; j++) chars[i][j] = '1';
-
-        return chars;
-    }
 }

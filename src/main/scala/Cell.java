@@ -7,6 +7,11 @@ class Cell {
         this.col = col;
     }
 
+    Cell(Cell cell) {
+        this.row = cell.row;
+        this.col = cell.col;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
