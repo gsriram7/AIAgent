@@ -2,11 +2,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.PriorityQueue;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class DriverTest {
 
@@ -84,6 +83,31 @@ public class DriverTest {
         Result res2 = results.poll();
         assertThat(res2.score, is(1));
         assertThat(res2.connectedCells.size(), is(1));
-        assertTrue(res2.connectedCells.contains(new Cell(2,2)));
+        assertThat(res2.connectedCells.contains(new Cell(2,2)), is(true));
+    }
+
+    @Test
+    public void shouldVerifyBeforeDescend() throws Exception {
+        HashSet<Cell> dfs = game.dfs(2, 2);
+
+        PriorityQueue<Result> results = driver.tryAllActions(game);
+
+        for (Result res : results) {
+            dfs.retainAll(res.connectedCells);
+            res.connectedCells.retainAll(dfs);
+            assertThat(dfs.isEmpty(), is(true));
+            assertThat(res.connectedCells.isEmpty(), is(true));
+        }
+    }
+
+    @Test
+    public void shouldBeEmptyIfAllExplored() throws Exception {
+        Game game = new Game(TestUtils.initWithOnes(5));
+
+        game.dfs(0,0);
+
+        PriorityQueue<Result> results = driver.tryAllActions(game);
+
+        assertThat(results.isEmpty(), is(true));
     }
 }

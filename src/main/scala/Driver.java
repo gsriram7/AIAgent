@@ -14,7 +14,7 @@ public class Driver {
             for (int col = 0; col < dimension; col++) {
                 Cell cellToChoose = new Cell(row, col);
 
-                if (!explored.contains(cellToChoose) && remaining != 0) {
+                if (!explored.contains(cellToChoose) && remaining != 0 && original.board[row][col] != '*') {
                     Game game = new Game(original);
                     HashSet<Cell> cells = game.dfs(row, col);
                     explored.addAll(cells);
