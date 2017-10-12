@@ -89,11 +89,15 @@ public class Game {
     HashSet<Cell> dfs(int row, int col) {
         HashSet<Cell> visited = new HashSet<>(dimension * dimension);
 
+        if (board[row][col] == '*')
+            return visited;
+
         dfs(board, board[row][col], row, col, visited);
 
         for (Cell cell : visited) board[cell.row][cell.col] = '*';
 
         updateScore(visited.size());
+
         return visited;
     }
 

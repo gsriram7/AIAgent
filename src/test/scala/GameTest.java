@@ -85,6 +85,15 @@ public class GameTest {
     }
 
     @Test
+    public void shouldNotDfsIfCellAlreadyVisited() throws Exception {
+        game.board[2][2] = '*';
+        HashSet<Cell> visited = game.dfs(2, 2);
+
+        assertThat(visited.size(), is(0));
+        assertThat(game.score, is(0));
+    }
+
+    @Test
     public void shouldMoveStarsToOneEndOfArray() throws Exception {
         char[] chars = new char[game.dimension];
         for (int i = 0; i < game.dimension; i++) chars[i] = '2';
@@ -124,6 +133,17 @@ public class GameTest {
         System.out.println(Arrays.deepToString(test.board));
 
         assertThat(test.board, is(ones));
+    }
+
+    @Test
+    public void shouldDescendAfterDfs() throws Exception {
+        char[][] copy = game.getCopy();
+        System.out.println(Arrays.deepToString(copy));
+        System.out.println(Arrays.deepToString(game.board));
+        System.out.println(Arrays.deepToString(game.board));
+        game.dfs(2,2);
+
+        System.out.println(Arrays.deepToString(game.board));
     }
 
     private char[][] initWithOnes(int size) {
