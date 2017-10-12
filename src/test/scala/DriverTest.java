@@ -66,10 +66,24 @@ public class DriverTest {
         }
     }
 
-    private void printPriorityQueue(PriorityQueue<Result> results) {
-        while (!results.isEmpty()) {
-            Result res = results.poll();
-            System.out.printf("%s\t %d %d\n", res.chosenCell, res.score, res.connectedCells.size());
-        }
+    @Test
+    public void shouldReturnOnly2ValuesForACustomDimension() throws Exception {
+        int size = 5;
+        Game game = new Game(TestUtils.initWithOnes(size));
+        game.board[2][2] = '0';
+
+        PriorityQueue<Result> results = driver.tryAllActions(game);
+
+        assertThat(results.size(), is(2));
+
+        Result res1 = results.poll();
+        int explored = size * size - 1;
+        assertThat(res1.score, is(explored * explored));
+        assertThat(res1.connectedCells.size(), is(explored));
+
+        Result res2 = results.poll();
+        assertThat(res2.score, is(1));
+        assertThat(res2.connectedCells.size(), is(1));
+        assertTrue(res2.connectedCells.contains(new Cell(2,2)));
     }
 }

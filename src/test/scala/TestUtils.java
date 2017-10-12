@@ -1,3 +1,4 @@
+import java.util.PriorityQueue;
 import java.util.Random;
 
 public class TestUtils {
@@ -17,6 +18,13 @@ public class TestUtils {
         for (int i = 0; i < size; i++) {
             game.board[2][i] = '0';
             game.board[i][2] = '0';
+        }
+    }
+
+    static void printPriorityQueue(PriorityQueue<Result> results) {
+        while (!results.isEmpty()) {
+            Result res = results.poll();
+            System.out.printf("%s\t %d %d\n", res.chosenCell, res.score, res.connectedCells.size());
         }
     }
 
