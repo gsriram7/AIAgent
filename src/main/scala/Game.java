@@ -7,7 +7,7 @@ public class Game {
     char[][] board;
     int dimension;
     int score = 0;
-    int numFruitsPopped = 0;
+    int fruitsPopped = 0;
 
     public Game(int dimension) {
         this.dimension = dimension;
@@ -20,7 +20,7 @@ public class Game {
             System.arraycopy(copy[i], 0, board[i], 0, copy.length);
 
         for (int i = 0; i < dimension; i++)
-            for (int j = 0; j < dimension; j++) if (board[i][j] == '*') numFruitsPopped++;
+            for (int j = 0; j < dimension; j++) if (board[i][j] == '*') fruitsPopped++;
     }
 
     public Game(Game copy) {
@@ -45,7 +45,6 @@ public class Game {
             int nextCol = col + c[i];
             if (isSafe(b, target, nextRow, nextCol)) {
                 board[nextRow][nextCol] = '*';
-                numFruitsPopped++;
                 dfs(b, target, nextRow, nextCol, visited);
             }
         }
@@ -98,19 +97,18 @@ public class Game {
 
         dfs(board, board[row][col], row, col, visited);
 
-        for (Cell cell : visited) board[cell.row][cell.col] = '*';
-
+        updateFruitsPopped(visited.size());
         updateScore(visited.size());
 
         return visited;
     }
 
-    char[][] getCopy() {
-        char[][] copy = new char[dimension][dimension];
-        for (int i = 0; i < dimension; i++)
-            for (int j = 0; j < dimension; j++)
-                copy[i][j] = board[i][i];
-        return copy;
+    void updateFruitsPopped(int size) {
+        fruitsPopped += size;
+    }
+
+    boolean isGameOver() {
+        return fruitsPopped >= (dimension*dimension);
     }
 
     public static void main(String[] args) {
@@ -132,6 +130,14 @@ public class Game {
         System.out.println(game);
         game.dfs(2, 0);
         System.out.println(game);
+    }
+
+    char[][] getCopy() {
+        char[][] copy = new char[dimension][dimension];
+        for (int i = 0; i < dimension; i++)
+            for (int j = 0; j < dimension; j++)
+                copy[i][j] = board[i][i];
+        return copy;
     }
 
     @Override

@@ -3,7 +3,6 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Random;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -146,7 +145,7 @@ public class GameTest {
     public void shouldKeepTrackOfNumFruitsPopped() throws Exception {
         game.dfs(2,2);
 
-        assertThat(game.numFruitsPopped, is(9));
+        assertThat(game.fruitsPopped, is(9));
     }
 
     @Test
@@ -154,7 +153,7 @@ public class GameTest {
         game.board[0][0] = '*';
         game.board[4][4] = '*';
 
-        assertThat(new Game(game).numFruitsPopped, is(2));
+        assertThat(new Game(game).fruitsPopped, is(2));
     }
 
     @Test
@@ -169,6 +168,24 @@ public class GameTest {
                 if (game.board[i][j] == '*')
                     stars++;
 
-        assertThat(game.numFruitsPopped, is(stars));
+        assertThat(game.fruitsPopped, is(stars));
+    }
+
+    @Test
+    public void shouldSayAllFruitsPoppedAfterAllExpored() throws Exception {
+        assertThat(game.fruitsPopped, is(0));
+
+        for (int i = 0; i < game.dimension; i++) for (int j = 0; j < game.dimension; j++) game.dfs(i, j);
+
+        assertThat(game.fruitsPopped, is(25));
+    }
+
+    @Test
+    public void testIfGameOver() throws Exception {
+        assertThat(game.isGameOver(), is(false));
+
+        for (int i = 0; i < game.dimension; i++) for (int j = 0; j < game.dimension; j++) game.dfs(i, j);
+
+        assertThat(game.isGameOver(), is(true));
     }
 }
