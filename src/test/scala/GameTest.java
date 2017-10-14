@@ -188,4 +188,13 @@ public class GameTest {
 
         assertThat(game.isGameOver(), is(true));
     }
+
+    @Test
+    public void dummyTests() throws Exception {
+        Cell cell = new Cell(1, 1);
+
+        System.out.println(cell);
+
+        assertThat(cell, is(new Cell(1,1)));
+    }
 }
