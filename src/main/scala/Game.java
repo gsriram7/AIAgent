@@ -1,8 +1,7 @@
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Random;
 
-public class Game {
+class Game {
 
     char[][] board;
     int dimension;
@@ -109,27 +108,6 @@ public class Game {
 
     boolean isGameOver() {
         return fruitsPopped >= (dimension*dimension);
-    }
-
-    public static void main(String[] args) {
-        char[] ip = {'0', '1', '2', '4'};
-        Random random = new Random(0);
-        Game game = new Game(5);
-        for (int i = 0; i < 5; i++) for (int j = 0; j < 5; j++) game.board[i][j] = ip[random.nextInt(4)];
-
-        for (int i = 0; i < 5; i++) {
-            game.board[2][i] = '5';
-            game.board[i][2] = '5';
-        }
-
-        game.board[1][4] = '5';
-        game.board[0][4] = '5';
-        game.board[3][4] = '5';
-        game.board[4][4] = '5';
-
-        System.out.println(game);
-        game.dfs(2, 0);
-        System.out.println(game);
     }
 
     char[][] getCopy() {

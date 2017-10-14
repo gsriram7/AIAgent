@@ -1,21 +1,21 @@
 import java.util.HashSet;
 
-public class Result implements Comparable<Result> {
+class Result implements Comparable<Result> {
 
     HashSet<Cell> connectedCells;
     Cell chosenCell;
-    int score;
+    Game game;
 
-    public Result(HashSet<Cell> visited, Cell cell, int score) {
+    Result(HashSet<Cell> visited, Cell cell, Game game) {
         connectedCells = new HashSet<Cell>(visited.size());
         connectedCells.addAll(visited);
 
         this.chosenCell = new Cell(cell);
-        this.score = score;
+        this.game = game;
     }
 
     @Override
     public int compareTo(Result o) {
-        return new Integer(o.score).compareTo(score);
+        return new Integer(o.game.score).compareTo(game.score);
     }
 }

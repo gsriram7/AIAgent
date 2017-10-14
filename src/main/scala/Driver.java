@@ -18,7 +18,8 @@ public class Driver {
                     Game game = new Game(original);
                     HashSet<Cell> cells = game.dfs(row, col);
                     explored.addAll(cells);
-                    Result result = new Result(cells, cellToChoose, game.score);
+
+                    Result result = new Result(cells, cellToChoose, game);
                     orderedSelection.add(result);
                     remaining = remaining - cells.size();
                 }
@@ -42,8 +43,7 @@ public class Driver {
 
                     Result move = moves.poll();
 
-                    Game child = new Game(game);
-                    child.dfs(move.chosenCell.row, move.chosenCell.col);
+                    Game child = move.game;
                     child.descendVisited();
 
                     int currentScore = minimax(depth - 1, child, Player.MIN, alpha, beta, max + child.score, min);
@@ -53,8 +53,7 @@ public class Driver {
                 }
                 else {
                     Result move = moves.poll();
-                    Game child = new Game(game);
-                    child.dfs(move.chosenCell.row, move.chosenCell.col);
+                    Game child = move.game;
                     child.descendVisited();
 
                     int currentScore = minimax(depth - 1, child, Player.MAX, alpha, beta, max, min + child.score);

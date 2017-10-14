@@ -24,7 +24,7 @@ public class TestUtils {
     static void printPriorityQueue(PriorityQueue<Result> results) {
         while (!results.isEmpty()) {
             Result res = results.poll();
-            System.out.printf("%s\t %d %d\n", res.chosenCell, res.score, res.connectedCells.size());
+            System.out.printf("%s\t %d %d\n", res.chosenCell, res.game.score, res.connectedCells.size());
         }
     }
 

@@ -48,7 +48,7 @@ public class DriverTest {
     public void shouldReturnTopScoreFirst() throws Exception {
         PriorityQueue<Result> results = driver.tryAllActions(game);
 
-        assertThat(results.poll().score, is(9 * 9));
+        assertThat(results.poll().game.score, is(9 * 9));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class DriverTest {
             HashSet<Cell> explored = g.dfs(res.chosenCell.row, res.chosenCell.col);
 
             assertThat(explored, is(res.connectedCells));
-            assertThat(g.score, is(res.score));
+            assertThat(g.score, is(res.game.score));
         }
     }
 
@@ -77,11 +77,11 @@ public class DriverTest {
 
         Result res1 = results.poll();
         int explored = size * size - 1;
-        assertThat(res1.score, is(explored * explored));
+        assertThat(res1.game.score, is(explored * explored));
         assertThat(res1.connectedCells.size(), is(explored));
 
         Result res2 = results.poll();
-        assertThat(res2.score, is(1));
+        assertThat(res2.game.score, is(1));
         assertThat(res2.connectedCells.size(), is(1));
         assertThat(res2.connectedCells.contains(new Cell(2,2)), is(true));
     }
