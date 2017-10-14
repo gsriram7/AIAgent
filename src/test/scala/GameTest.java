@@ -182,11 +182,13 @@ public class GameTest {
 
     @Test
     public void testIfGameOver() throws Exception {
-        assertThat(game.isGameOver(), is(false));
+        Game g = new Game(TestUtils.initWithOnes(5));
 
-        for (int i = 0; i < game.dimension; i++) for (int j = 0; j < game.dimension; j++) game.dfs(i, j);
+        assertThat(g.isGameOver(), is(false));
 
-        assertThat(game.isGameOver(), is(true));
+        g.dfs(0,0);
+
+        assertThat(g.isGameOver(), is(true));
     }
 
     @Test
