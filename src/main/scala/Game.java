@@ -7,6 +7,7 @@ public class Game {
     char[][] board;
     int dimension;
     int score = 0;
+    int numFruitsPopped = 0;
 
     public Game(int dimension) {
         this.dimension = dimension;
@@ -17,6 +18,9 @@ public class Game {
         this(copy.length);
         for (int i = 0; i < copy.length; i++)
             System.arraycopy(copy[i], 0, board[i], 0, copy.length);
+
+        for (int i = 0; i < dimension; i++)
+            for (int j = 0; j < dimension; j++) if (board[i][j] == '*') numFruitsPopped++;
     }
 
     public Game(Game copy) {
@@ -41,6 +45,7 @@ public class Game {
             int nextCol = col + c[i];
             if (isSafe(b, target, nextRow, nextCol)) {
                 board[nextRow][nextCol] = '*';
+                numFruitsPopped++;
                 dfs(b, target, nextRow, nextCol, visited);
             }
         }

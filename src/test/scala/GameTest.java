@@ -141,4 +141,34 @@ public class GameTest {
         System.out.println(Arrays.deepToString(game.board));
     }
 
+
+    @Test
+    public void shouldKeepTrackOfNumFruitsPopped() throws Exception {
+        game.dfs(2,2);
+
+        assertThat(game.numFruitsPopped, is(9));
+    }
+
+    @Test
+    public void shouldInitNumFruitsPoppedInStartup() throws Exception {
+        game.board[0][0] = '*';
+        game.board[4][4] = '*';
+
+        assertThat(new Game(game).numFruitsPopped, is(2));
+    }
+
+    @Test
+    public void numFruitsDroppedShouldBeSameEvenAfterDescend() throws Exception {
+        game.dfs(2,2);
+
+        game.descendVisited();
+
+        int stars = 0;
+        for (int i = 0; i < game.dimension; i++)
+            for (int j = 0; j < game.dimension; j++)
+                if (game.board[i][j] == '*')
+                    stars++;
+
+        assertThat(game.numFruitsPopped, is(stars));
+    }
 }
