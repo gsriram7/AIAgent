@@ -9,12 +9,12 @@ public class Game {
     int score = 0;
     int fruitsPopped = 0;
 
-    public Game(int dimension) {
+    Game(int dimension) {
         this.dimension = dimension;
         board = new char[dimension][dimension];
     }
 
-    public Game(char[][] copy) {
+    Game(char[][] copy) {
         this(copy.length);
         for (int i = 0; i < copy.length; i++)
             System.arraycopy(copy[i], 0, board[i], 0, copy.length);
@@ -23,7 +23,7 @@ public class Game {
             for (int j = 0; j < dimension; j++) if (board[i][j] == '*') fruitsPopped++;
     }
 
-    public Game(Game copy) {
+    Game(Game copy) {
         this(copy.board);
         this.score = copy.score;
     }

@@ -1,4 +1,3 @@
-import java.util.Comparator;
 import java.util.HashSet;
 
 public class Result implements Comparable<Result> {

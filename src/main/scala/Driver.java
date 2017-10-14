@@ -30,4 +30,49 @@ public class Driver {
     }
 
 
+    int minimax(int depth, Game game, Player turn, int alpha, int beta, int max, int min) {
+        PriorityQueue<Result> moves = tryAllActions(game);
+
+        if (moves.isEmpty() || depth == 0)
+            evaluate(max, min);
+
+        else {
+            while (!moves.isEmpty()) {
+                if (turn.equals(Player.MAX)){
+
+                    Result move = moves.poll();
+
+                    Game child = new Game(game);
+                    child.dfs(move.chosenCell.row, move.chosenCell.col);
+                    child.descendVisited();
+
+                    int currentScore = minimax(depth - 1, child, Player.MIN, alpha, beta, max + child.score, min);
+                    if (currentScore > alpha) {
+                        alpha = currentScore;
+                    }
+                }
+                else {
+                    Result move = moves.poll();
+                    Game child = new Game(game);
+                    child.dfs(move.chosenCell.row, move.chosenCell.col);
+                    child.descendVisited();
+
+                    int currentScore = minimax(depth - 1, child, Player.MAX, alpha, beta, max, min + child.score);
+                    if (currentScore < beta) {
+                        beta = currentScore;
+                    }
+                }
+
+                if (alpha >= beta)
+                    break;
+            }
+        }
+
+        return (turn == Player.MAX) ? alpha : beta;
+    }
+
+    int evaluate(int max, int min) {
+        return max - min;
+    }
+
 }
