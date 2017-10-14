@@ -96,6 +96,8 @@ class Game {
 
         dfs(board, board[row][col], row, col, visited);
 
+        for (Cell cell : visited) board[cell.row][cell.col] = '*';
+
         updateFruitsPopped(visited.size());
         updateScore(visited.size());
 
