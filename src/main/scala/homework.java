@@ -10,7 +10,9 @@ class homework {
         BufferedReader ip = new BufferedReader(new FileReader(src));
 
         int dim = Integer.parseInt(ip.readLine());
-        ip.readLine();
+        int fruits = Integer.parseInt(ip.readLine());
+        double timeLeft = Double.parseDouble(ip.readLine());
+
         Game game = new Game(dim);
 
         for (int i = 0; i < dim; i++) {
@@ -20,10 +22,12 @@ class homework {
 
         ip.close();
 
-        System.out.println(game);
-
         Selection selection = driver.minimax(19, game, Player.MAX, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 0, new Cell(-1, -1));
-        System.out.println(selection);
+        game.dfs(selection.cellToChoose.row, selection.cellToChoose.col);
+        game.descendVisited();
+
+        System.out.println(selection.formattedOutput());
+        System.out.println(game);
     }
 
 }

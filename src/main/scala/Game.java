@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.HashSet;
 
 class Game {
@@ -124,8 +123,10 @@ class Game {
     public String toString() {
         StringBuilder str = new StringBuilder();
         for (char[] b : board) {
-            String s = Arrays.toString(b);
-            str.append(s).append("\n");
+            for (char c : b) {
+                str.append(c);
+            }
+            str.append("\n");
         }
         return str.toString();
     }
