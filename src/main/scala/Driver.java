@@ -35,11 +35,13 @@ public class Driver {
     }
 
 
-    int minimax(int depth, Game game, Player turn, int alpha, int beta, int max, int min) {
+    Selection minimax(int depth, Game game, Player turn, int alpha, int beta, int max, int min, Cell cell) {
         PriorityQueue<Result> moves = tryAllActions(game);
 
-        if (moves.isEmpty() || depth == 0)
-            return evaluate(max, min);
+        if (moves.isEmpty() || depth == 0) {
+            int score = evaluate(max, min);
+            return new Selection(cell, score);
+        }
 
         else {
             while (!moves.isEmpty()) {
@@ -50,8 +52,10 @@ public class Driver {
                     Game child = move.game;
                     child.descendVisited();
 
-                    int currentScore = minimax(depth - 1, child, Player.MIN, alpha, beta, max + changeInScore(child.score, game.score), min);
+                    Selection selection = minimax(depth - 1, child, Player.MIN, alpha, beta, max + changeInScore(child.score, game.score), min, cell);
+                    int currentScore = selection.score;
                     if (currentScore > alpha) {
+                        cell = move.chosenCell;
                         alpha = currentScore;
                     }
                 }
@@ -60,8 +64,10 @@ public class Driver {
                     Game child = move.game;
                     child.descendVisited();
 
-                    int currentScore = minimax(depth - 1, child, Player.MAX, alpha, beta, max, min + changeInScore(child.score, game.score));
+                    Selection selection = minimax(depth - 1, child, Player.MAX, alpha, beta, max, min + changeInScore(child.score, game.score), cell);
+                    int currentScore = selection.score;
                     if (currentScore < beta) {
+                        cell = move.chosenCell;
                         beta = currentScore;
                     }
                 }
@@ -71,7 +77,7 @@ public class Driver {
             }
         }
 
-        return (turn == Player.MAX) ? alpha : beta;
+        return (turn == Player.MAX) ? new Selection(cell, alpha) : new Selection(cell, beta);
     }
 
     int changeInScore(int newScore, int oldScore) {
@@ -100,8 +106,8 @@ public class Driver {
 
         System.out.println(game);
 
-        int score = driver.minimax(19, game, Player.MAX, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 0);
-        System.out.println(score);
+        Selection selection = driver.minimax(19, game, Player.MAX, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 0, new Cell(-1, -1));
+        System.out.println(selection);
     }
 
 }

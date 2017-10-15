@@ -110,4 +110,15 @@ public class DriverTest {
 
         assertThat(results.isEmpty(), is(true));
     }
+
+    @Test
+    public void shouldReturnEvaluationResultFor2Values() throws Exception {
+        assertThat(driver.evaluate(5,4), is(1));
+    }
+
+    @Test
+    public void shouldReturnChangeInScoreFor2Scores() throws Exception {
+        assertThat(driver.changeInScore(5,4), is(1));
+        assertThat(driver.changeInScore(3,4), is(-1));
+    }
 }
