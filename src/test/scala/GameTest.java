@@ -137,7 +137,7 @@ public class GameTest {
         System.out.println(Arrays.deepToString(game.board));
         game.dfs(2,2);
 
-        System.out.println(Arrays.deepToString(game.board));
+        System.out.println(game);
     }
 
 
