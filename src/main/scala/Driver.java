@@ -1,4 +1,7 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
@@ -36,7 +39,7 @@ public class Driver {
         PriorityQueue<Result> moves = tryAllActions(game);
 
         if (moves.isEmpty() || depth == 0)
-            evaluate(max, min);
+            return evaluate(max, min);
 
         else {
             while (!moves.isEmpty()) {
@@ -47,7 +50,7 @@ public class Driver {
                     Game child = move.game;
                     child.descendVisited();
 
-                    int currentScore = minimax(depth - 1, child, Player.MIN, alpha, beta, max + child.score, min);
+                    int currentScore = minimax(depth - 1, child, Player.MIN, alpha, beta, max + changeInScore(child.score, game.score), min);
                     if (currentScore > alpha) {
                         alpha = currentScore;
                     }
@@ -57,7 +60,7 @@ public class Driver {
                     Game child = move.game;
                     child.descendVisited();
 
-                    int currentScore = minimax(depth - 1, child, Player.MAX, alpha, beta, max, min + child.score);
+                    int currentScore = minimax(depth - 1, child, Player.MAX, alpha, beta, max, min + changeInScore(child.score, game.score));
                     if (currentScore < beta) {
                         beta = currentScore;
                     }
@@ -69,6 +72,10 @@ public class Driver {
         }
 
         return (turn == Player.MAX) ? alpha : beta;
+    }
+
+    int changeInScore(int newScore, int oldScore) {
+        return newScore - oldScore;
     }
 
     int evaluate(int max, int min) {
@@ -93,10 +100,8 @@ public class Driver {
 
         System.out.println(game);
 
-        PriorityQueue<Result> results = driver.tryAllActions(game);
-        System.out.println(results.size());
-        while (!results.isEmpty())
-            System.out.println(results.poll().game);
+        int score = driver.minimax(19, game, Player.MAX, Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 0);
+        System.out.println(score);
     }
 
 }
