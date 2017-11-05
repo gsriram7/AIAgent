@@ -7,7 +7,7 @@ class Driver {
     public static void main(String[] args) throws IOException {
         long startTime = System.currentTimeMillis();
         Agent agent = new Agent();
-        File src = new File("/Users/selvaram/selva/AIAgent/src/main/resources/input.txt");
+        File src = new File(agent.getClass().getResource("input.txt").getFile());
         BufferedReader ip = new BufferedReader(new FileReader(src));
 
         int dim = Integer.parseInt(ip.readLine());
