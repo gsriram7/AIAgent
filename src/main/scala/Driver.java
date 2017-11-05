@@ -1,87 +1,87 @@
-import java.util.HashSet;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 class Driver {
+    public static void main(String[] args) throws IOException {
+        long startTime = System.currentTimeMillis();
+        Agent agent = new Agent();
+        File src = new File("/Users/selvaram/selva/AIAgent/src/main/resources/input.txt");
+        BufferedReader ip = new BufferedReader(new FileReader(src));
 
-    PriorityQueue<Result> tryAllActions(Game original) {
+        int dim = Integer.parseInt(ip.readLine());
+        int fruits = Integer.parseInt(ip.readLine());
+        double timeLeft = Double.parseDouble(ip.readLine());
+        timeLeft = timeLeft * 1000;
 
-        int dimension = original.dimension;
-        HashSet<Cell> explored = new HashSet<Cell>(dimension * dimension);
-        PriorityQueue<Result> orderedSelection = new PriorityQueue<Result>(dimension * dimension);
+        Game original = new Game(dim);
+        ArrayList<Cell> fruitCells = new ArrayList<>();
 
-        int remaining = dimension * dimension;
-        for (int row = 0; row < dimension; row++) {
-            for (int col = 0; col < dimension; col++) {
-                Cell cellToChoose = new Cell(row, col);
+        for (int i = 0; i < dim; i++) {
+            char[] fruit = ip.readLine().toCharArray();
+            for (int j = 0; j < fruit.length; j++) {
+                if (fruit[j] == '*')
+                    original.fruitsPopped++;
+                else fruitCells.add(new Cell(i, j));
 
-                if (!explored.contains(cellToChoose) && remaining != 0 && original.board[row][col] != '*') {
-                    Game game = new Game(original);
-                    HashSet<Cell> cells = game.dfs(row, col);
-                    explored.addAll(cells);
-
-                    Result result = new Result(cells, cellToChoose, game);
-                    orderedSelection.add(result);
-                    remaining = remaining - cells.size();
-                }
-
+                original.board[i][j] = fruit[j];
             }
         }
 
-        return orderedSelection;
-    }
+        ip.close();
 
+        Game game = new Game(original);
 
-    Selection minimax(int depth, Game game, Player turn, int alpha, int beta, int max, int min, Cell cell) {
-        PriorityQueue<Result> moves = tryAllActions(game);
-
-        if (moves.isEmpty() || depth == 0) {
-            int score = evaluate(max, min);
-            return new Selection(cell, score);
+        if (timeLeft < 1000) {
+            rand(fruitCells, game);
         }
-
         else {
-            while (!moves.isEmpty()) {
-                if (turn.equals(Player.MAX)){
+            int time = (int) timeLeft - 1000;
+            int size = original.remainingFruits();
+            int depth = Calib.getDepth(size, time);
+            long timeInLong = new Integer(time).longValue();
+            Selection selection = agent.minimax(depth, game, Player.MAX,
+                    Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 0,
+                    new Cell(-1, -1), timeInLong, startTime);
 
-                    Result move = moves.poll();
+            if (selection.cellToChoose.equals(new Cell(-1, -1))) {
+                PriorityQueue<Result> results = agent.tryAllActions(new Game(original));
+                Result top = results.peek();
+                Cell cell = top.chosenCell;
 
-                    Game child = move.game;
-                    child.descendVisited();
+                game.dfs(cell.row, cell.col);
+                game.descendVisited();
 
-                    Selection selection = minimax(depth - 1, child, Player.MIN, alpha, beta, max + changeInScore(child.score, game.score), min, cell);
-                    int currentScore = selection.score;
-                    if (currentScore > alpha) {
-                        cell = move.chosenCell;
-                        alpha = currentScore;
-                    }
-                }
-                else {
-                    Result move = moves.poll();
-                    Game child = move.game;
-                    child.descendVisited();
+                writeOutput(new Selection(cell, 100).formattedOutput(), game.toString());
+            }
+            else {
+                game.dfs(selection.cellToChoose.row, selection.cellToChoose.col);
+                game.descendVisited();
 
-                    Selection selection = minimax(depth - 1, child, Player.MAX, alpha, beta, max, min + changeInScore(child.score, game.score), cell);
-                    int currentScore = selection.score;
-                    if (currentScore < beta) {
-                        cell = move.chosenCell;
-                        beta = currentScore;
-                    }
-                }
-
-                if (alpha >= beta)
-                    break;
+                writeOutput(selection.formattedOutput(), game.toString());
             }
         }
-
-        return (turn == Player.MAX) ? new Selection(cell, alpha) : new Selection(cell, beta);
     }
 
-    int changeInScore(int newScore, int oldScore) {
-        return newScore - oldScore;
+    private static void rand(ArrayList<Cell> fruitCells, Game game) throws IOException {
+        Random cell = new Random(0);
+        int choice = cell.nextInt(fruitCells.size());
+        Cell c = fruitCells.get(choice);
+        game.dfs(c.row, c.col);
+        game.descendVisited();
+
+        writeOutput(new Selection(new Cell(c.row, c.col), 100).formattedOutput(), game.toString());
     }
 
-    int evaluate(int max, int min) {
-        return max - min;
+    private static void writeOutput(String position, String board) throws IOException {
+        File file = new File("output.txt");
+        BufferedWriter br = new BufferedWriter(new FileWriter(file));
+        br.write(position + "\n" + board);
+        System.out.println(position + "\n" + board);
+        br.flush();
+        br.close();
     }
+
 
 }

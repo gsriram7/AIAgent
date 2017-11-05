@@ -107,8 +107,12 @@ class Game {
         fruitsPopped += size;
     }
 
+    int remainingFruits() {
+        return dimension * dimension - fruitsPopped;
+    }
+
     boolean isGameOver() {
-        return fruitsPopped >= (dimension*dimension);
+        return fruitsPopped >= (dimension * dimension);
     }
 
     char[][] getCopy() {
